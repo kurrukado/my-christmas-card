@@ -31,6 +31,7 @@
             color: #fff;
             font-size: 2.5em;
             margin: 0;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
         }
         .message {
             font-size: 1.5em;
@@ -49,6 +50,9 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s, color 0.3s;
+            font-size: 1.2em;
+            margin-top: 15px;
+            display: inline-block;
         }
         .button:hover {
             background: #b22222;
@@ -128,12 +132,41 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
+        #orientationWarning {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 20;
+        }
+
+        /* Media queries cho thiết bị di động */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            .message {
+                font-size: 1.2em;
+            }
+            .button {
+                padding: 8px 12px;
+            }
+        }
     </style>
 </head>
 <body>
+    <div id="orientationWarning">
+        <h1>Vui lòng quay ngang điện thoại!</h1>
+        <p>Để có trải nghiệm tốt nhất, hãy sử dụng chế độ ngang.</p>
+    </div>
+
     <div class="card">
         <h1>Chúc Mừng Giáng Sinh!</h1>
-        <button class="button" onclick="startGift()">Xem Hộp Quà</button>
+        <button class="button" onclick="startGift()">Mở Hộp Quà</button>
     </div>
 
     <div class="container" id="giftContainer">
@@ -189,18 +222,30 @@
 
         setInterval(createSnowflake, 300);
 
-        document.addEventListener("click", function() {
+        function checkOrientation() {
+            if (window.innerWidth < window.innerHeight) {
+                document.getElementById("orientationWarning").style.display = "flex";
+                document.querySelector('.card').style.display = "none";
+                document.getElementById("giftContainer").style.display = "none";
+            } else {
+                document.getElementById("orientationWarning").style.display = "none";
+                document.querySelector('.card').style.display = "flex";
+            }
+        }
+
+        window.addEventListener("resize", checkOrientation);
+        window.addEventListener("load", checkOrientation);
+
+        function startGift() {
             if (!isGiftOpened && christmasSound.paused) {
                 christmasSound.play();
                 const greeting = document.querySelector('.card');
                 const giftContainer = document.getElementById("giftContainer");
 
-                if (greeting.style.display !== "none") {
-                    greeting.style.display = "none";
-                    giftContainer.style.display = "flex";
-                }
+                greeting.style.display = "none";
+                giftContainer.style.display = "flex";
             }
-        });
+        }
 
         function selectGift(gift) {
             if (isGiftOpened) return;

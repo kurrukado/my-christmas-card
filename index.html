@@ -74,16 +74,13 @@
         .boxBody {
             width: 80px;
             height: 80px;
-            background-color: #ff6600;
-            border: 2px solid #ffffff;
-            border-radius: 10px;
             position: relative;
             transition: transform 0.3s;
+            overflow: hidden;
         }
         .boxHead {
             width: 80px;
             height: 20px;
-            background-color: #b22222;
             position: absolute;
             top: -20px;
             left: 0;
@@ -120,19 +117,19 @@
             transition: transform 0.5s, opacity 0.5s;
         }
         .balloon {
-            position: fixed;
-            background-color: white;
-            border-radius: 50%;
-            width: 80px;
-            height: 80px;
-            opacity: 0;
-            transform: scale(0);
-            transition: transform 0.5s, opacity 0.5s;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        position: fixed; 
+        background-color: white; 
+        border-radius: 50%; 
+        width: 45px; 
+        height: 45px; 
+        opacity: 0; 
+        transform: scale(0); 
+        transition: transform 1s, opacity 0.75s;
+        top: 57%; /* tọa độ giữa y */
+        left: 52.55%; /* tọa độ giữa x */
+        transform: translate(-50%, -50%);
         }
-        #orientationWarning {
+        #orientationWarning { 
             display: none;
             flex-direction: column;
             align-items: center;
@@ -144,7 +141,7 @@
             z-index: 20;
         }
 
-        /* Media queries cho thiết bị di động */
+        /* Truy vấn phương tiện cho thiết bị di động */
         @media (max-width: 768px) {
             h1 {
                 font-size: 2em;
@@ -161,7 +158,8 @@
 <body>
     <div id="orientationWarning">
         <h1>Vui lòng quay ngang điện thoại!</h1>
-        <p>Để có trải nghiệm tốt nhất, hãy sử dụng chế độ ngang.</p>
+        <p>Để có trải nghiệm tốt nhất, hãy xoay ngang màn hình lại !</p>
+        <p2>To have the best experiment, please rotate your phone! </p2>
     </div>
 
     <div class="card">
@@ -172,23 +170,35 @@
     <div class="container" id="giftContainer">
         <div id="gifts" style="display: flex; justify-content: center; margin: 0 auto;">
             <div class="gift" id="gift1" onmouseover="enlargeGift(this)" onmouseout="resetGift(this)" onclick="selectGift(this)">
-                <div class="boxHead"></div>
-                <div class="boxBody"></div>
+                <div class="boxHead">
+                    <img src="/christmasBox/boxHead.jpg" style="width: 100%; height: 100%;"/>
+                </div>
+                <div class="boxBody">
+                    <img src="/christmasBox/boxBody.jpg" alt="Open the gift" style="width: 100%; height: 100%; border-radius: 10px;"/>
+                </div>
             </div>
             <div class="gift" id="gift2" onmouseover="enlargeGift(this)" onmouseout="resetGift(this)" onclick="selectGift(this)">
-                <div class="boxHead"></div>
-                <div class="boxBody"></div>
+                <div class="boxHead">
+                    <img src="/christmasBox/boxHead.jpg" style="width: 100%; height: 100%;"/>
+                </div>
+                <div class="boxBody">
+                    <img src="/christmasBox/boxBody.jpg" alt="Open the gift" style="width: 100%; height: 100%; border-radius: 10px;"/>
+                </div>
             </div>
             <div class="gift" id="gift3" onmouseover="enlargeGift(this)" onmouseout="resetGift(this)" onclick="selectGift(this)">
-                <div class="boxHead"></div>
-                <div class="boxBody"></div>
+                <div class="boxHead">
+                    <img src="/christmasBox/boxHead.jpg" style="width: 100%; height: 100%;"/>
+                </div>
+                <div class="boxBody">
+                    <img src="/christmasBox/boxBody.jpg" alt="Open the gift" style="width: 100%; height: 100%; border-radius: 10px;"/>
+                </div>
             </div>
         </div>
         <p id="message" class="message"></p>
         <div id="balloon" class="balloon"></div>
     </div>
 
-    <audio id="christmasSound" src="https://cdn.pixabay.com/download/audio/2022/12/23/audio_256125.mp3" loop></audio>
+    <audio autoplay muted id="christmasSound" src="christmas_sound.mp3" loop></audio>
 
     <script>
         const messages = [
@@ -262,37 +272,58 @@
             const balloon = document.getElementById("balloon");
             balloon.style.opacity = 1;
             balloon.style.transform = "translate(-50%, -50%) scale(1)";
+            
 
-            setTimeout(() => {
-                gift.querySelector('.boxBody').style.transform = "translateY(20px)";
-                gift.querySelector('.boxHead').style.transform = "translateY(-50px)";
-
-                setTimeout(() => {
-                    balloon.style.transform = "translate(-50%, -50%) scale(1)";
+            setTimeout(() => { // thu nhỏ
+              
+                gift.style.transform = "scale(0.9)";
+                gift.style.transition = "transform 0.2s";
+                
+                setTimeout(() => { // phóng to
+                    gift.style.transform = "scale(1.5)";
 
                     setTimeout(() => {
-                        balloon.style.transform = "translate(calc(-50% + 350px), -50%)";
+                        // đưa về ban đầu
+                        gift.style.transform = "scale(1)";
 
-                        setTimeout(() => {
-                            balloon.style.transform = "translate(calc(-50% - 200px), -50%)";
 
-                            gift.style.transition = "opacity 0.5s, transform 0.5s";
-                            gift.style.opacity = 0;
+                        gift.querySelector('.boxBody').style.transform = "translateY(45px)";
+                        gift.querySelector('.boxHead').style.transform = "translateY(-60px)";
 
-                            setTimeout(() => {
-                                const randomIndex = Math.floor(Math.random() * messages.length);
-                                const messageElement = document.getElementById("message");
-                                messageElement.innerText = messages[randomIndex];
-                                messageElement.style.opacity = 1;
-                                messageElement.style.transform = "scale(1)";
-                                balloon.style.opacity = 0; // Đảm bảo viên tròn biến mất
-                            }, 500); // Thời gian biến mất hộp quà
-                        }, 500); // Thời gian di chuyển trái
-                    }, 500); // Thời gian di chuyển phải
-                }, 500); // Thời gian mở hộp quà
-            }, 500); // Thời gian mở hộp quà
-        }
+                        setTimeout(() => { // di chuyển lên 1 chút
+                            balloon.style.transform = "translate(-50%, -250%)";
 
+                            setTimeout(() => { // di chuyển sang phải
+                                
+                                balloon.style.transform = "translate(calc(-50% + 350px), -230%)";
+
+                                setTimeout(() => { // di chuyển sang trái
+                                    balloon.style.transform = "translate(calc(-50% - 200px), -230%)";
+
+                                    //hộp quà biến mất
+                                    gift.style.transition = "opacity 1s, transform 1s";
+                                    gift.style.opacity = 0;
+
+                                    setTimeout(() => { //animation cho cục tròn
+                                        balloon.style.transition = "opacity 1s, transform 0.5s";
+                                        balloon.style.opacity = 0; // Đảm bảo viên tròn biến mất
+
+                                        setTimeout(() => {
+                                        const randomIndex = Math.floor(Math.random() * messages.length);
+                                        const messageElement = document.getElementById("message");
+                                        messageElement.innerText = messages[randomIndex];
+                                        messageElement.style.opacity = 0.75;
+                                        messageElement.style.transform = "scale(1)";
+                                    
+                                    }); //animation lời chúc
+                                }, 1000); // Thời gian biến mất hộp quà
+                            }, 500); // Chờ để snag trái
+                        }, 500); // Hộp quà biến mất và chờ để sang phải
+                    }, 1000); // Thu nhỏ và chờ mở hộp quà
+                }, 500); // Thời gian phóng to hộp quà
+            }, 100) // Chờ phóng to thu nhỏ hộp quà
+        }, 500) // Chờ thu nhỏ hộp quà
+    }
         function enlargeGift(gift) {
             gift.style.transform = "scale(1.1)";
         }

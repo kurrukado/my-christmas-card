@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Giáng Sinh Vui Vẻ</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #1a1a1a;
+            font-family: 'Roboto', sans-serif;
+            color: #fff;
+            overflow: hidden;
+            position: relative;
+        }
+        .card {
+            background: linear-gradient(to bottom right, #ff6600, #b22222);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            transition: opacity 0.5s;
+            max-width: 400px;
+            margin: auto;
+        }
+        h1 {
+            color: #fff;
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        .message {
+            font-size: 1.5em;
+            margin: 15px 0;
+            opacity: 0;
+            transform: scale(0);
+            transition: opacity 0.5s, transform 0.5s;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(255, 215, 0, 0.7);
+            text-align: center;
+        }
+        .button {
+            padding: 10px 15px;
+            background: #fff;
+            color: #b22222;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+            font-size: 1.2em;
+            margin-top: 15px;
+            display: inline-block;
+        }
+        .button:hover {
+            background: #b22222;
+            color: white;
+        }
+        #giftContainer {
+            display: none;
+            margin-top: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .gift {
+            display: inline-block;
+            margin: 10px;
+            opacity: 1;
+            transition: transform 0.5s, opacity 0.5s;
+            position: relative;
+        }
+        .boxBody {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            transition: transform 0.3s;
+            overflow: hidden;
+        }
+        .boxHead {
+            width: 80px;
+            height: 20px;
+            position: absolute;
+            top: -20px;
+            left: 0;
+            transition: transform 0.5s;
+        }
+        .snowflake {
+            position: absolute;
+            top: -10%;
+            color: #ffffff;
+            font-size: 24px;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(100vh);
+            }
+        }
+        .selected {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(2);
+            z-index: 10;
+            transition: transform 0.5s ease-in-out;
+        }
+        .hidden {
+            opacity: 0;
+            transform: scale(0.5);
+            transition: transform 0.5s, opacity 0.5s;
+        }
+        .balloon {
+        position: fixed; 
+        background-color: white; 
+        border-radius: 50%; 
+        width: 45px; 
+        height: 45px; 
+        opacity: 0; 
+        transform: scale(0); 
+        transition: transform 1s, opacity 0.75s;
+        top: 57%; /* tọa độ giữa y */
+        left: 52.55%; /* tọa độ giữa x */
+        transform: translate(-50%, -50%);
+        }
+        #orientationWarning { 
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 20;
+        }
+
+        /* Truy vấn phương tiện cho thiết bị di động */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            .message {
+                font-size: 1.2em;
+            }
+            .button {
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="orientationWarning">
+        <h1>Vui lòng quay ngang điện thoại!</h1>
+        <p>Để có trải nghiệm tốt nhất, hãy xoay ngang màn hình lại !</p>
+        <p2>To have the best experiment, please rotate your phone! </p2>
+    </div>
+
+    <div class="card">
+        <h1>Chúc Mừng Giáng Sinh!</h1>
+        <button class="button" onclick="startGift()">Mở Hộp Quà</button>
+    </div>
+
+    <div class="container" id="giftContainer">
+        <div id="gifts" style="display: flex; justify-content: center; margin: 0 auto;">
+            <div class="gift" id="gift1" onmouseover="enlargeGift(this)" onmouseout="resetGift(this)" onclick="selectGift(this)">
+                <div class="boxHead">
+                    <img src="/christmasBox/boxHead.jpg" style="width: 100%; height: 100%;"/>
+                </div>
+                <div class="boxBody">
+                    <img src="/christmasBox/boxBody.jpg" alt="Open the gift" style="width: 100%; height: 100%; border-radius: 10px;"/>
+                </div>
+            </div>
+            <div class="gift" id="gift2" onmouseover="enlargeGift(this)" onmouseout="resetGift(this)" onclick="selectGift(this)">
+                <div class="boxHead">
+                    <img src="/christmasBox/boxHead.jpg" style="width: 100%; height: 100%;"/>
+                </div>
+                <div class="boxBody">
+                    <img src="/christmasBox/boxBody.jpg" alt="Open the gift" style="width: 100%; height: 100%; border-radius: 10px;"/>
+                </div>
+            </div>
+            <div class="gift" id="gift3" onmouseover="enlargeGift(this)" onmouseout="resetGift(this)" onclick="selectGift(this)">
+                <div class="boxHead">
+                    <img src="/christmasBox/boxHead.jpg" style="width: 100%; height: 100%;"/>
+                </div>
+                <div class="boxBody">
+                    <img src="/christmasBox/boxBody.jpg" alt="Open the gift" style="width: 100%; height: 100%; border-radius: 10px;"/>
+                </div>
+            </div>
+        </div>
+        <p id="message" class="message"></p>
+        <div id="balloon" class="balloon"></div>
+    </div>
+
+    <audio autoplay muted id="christmasSound" src="christmas_sound.mp3" loop></audio>
+
+    <script>
+        const messages = [
+            "Chúc bạn một Giáng Sinh an lành!",
+            "Mong rằng mùa lễ này đầy ắp niềm vui!",
+            "Chúc bạn và gia đình sức khỏe và hạnh phúc!",
+            "Hy vọng bạn nhận được nhiều món quà tuyệt vời!",
+            "Chúc bạn có một kỳ nghỉ thật tuyệt vời!",
+            "Mong rằng mọi điều tốt đẹp sẽ đến với bạn!",
+            "Chúc bạn có một Giáng Sinh ấm áp bên gia đình!",
+            "Chúc bạn những giây phút thư giãn và vui vẻ!",
+            "Hy vọng bạn sẽ có những kỷ niệm đáng nhớ trong mùa lễ này!",
+            "Chúc bạn mọi điều tốt đẹp nhất trong năm mới sắp tới!"
+        ];
+
+        const christmasSound = document.getElementById("christmasSound");
+        let isGiftOpened = false;
+
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.className = 'snowflake';
+            snowflake.innerHTML = '❄';
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(snowflake);
+
+            setTimeout(() => {
+                snowflake.remove();
+            }, 5000);
+        }
+
+        setInterval(createSnowflake, 300);
+
+        function checkOrientation() {
+            if (window.innerWidth < window.innerHeight) {
+                document.getElementById("orientationWarning").style.display = "flex";
+                document.querySelector('.card').style.display = "none";
+                document.getElementById("giftContainer").style.display = "none";
+            } else {
+                document.getElementById("orientationWarning").style.display = "none";
+                document.querySelector('.card').style.display = "flex";
+            }
+        }
+
+        window.addEventListener("resize", checkOrientation);
+        window.addEventListener("load", checkOrientation);
+
+        function startGift() {
+            if (!isGiftOpened && christmasSound.paused) {
+                christmasSound.play();
+                const greeting = document.querySelector('.card');
+                const giftContainer = document.getElementById("giftContainer");
+
+                greeting.style.display = "none";
+                giftContainer.style.display = "flex";
+            }
+        }
+
+        function selectGift(gift) {
+            if (isGiftOpened) return;
+
+            isGiftOpened = true;
+            const gifts = document.querySelectorAll('.gift');
+            gifts.forEach(g => {
+                if (g !== gift) {
+                    g.classList.add('hidden');
+                }
+            });
+            gift.classList.add('selected');
+
+            const balloon = document.getElementById("balloon");
+            balloon.style.opacity = 1;
+            balloon.style.transform = "translate(-50%, -50%) scale(1)";
+            
+
+            setTimeout(() => { // thu nhỏ
+              
+                gift.style.transform = "scale(0.9)";
+                gift.style.transition = "transform 0.2s";
+                
+                setTimeout(() => { // phóng to
+                    gift.style.transform = "scale(1.5)";
+
+                    setTimeout(() => {
+                        // đưa về ban đầu
+                        gift.style.transform = "scale(1)";
+
+
+                        gift.querySelector('.boxBody').style.transform = "translateY(45px)";
+                        gift.querySelector('.boxHead').style.transform = "translateY(-60px)";
+
+                        setTimeout(() => { // di chuyển lên 1 chút
+                            balloon.style.transform = "translate(-50%, -250%)";
+
+                            setTimeout(() => { // di chuyển sang phải
+                                
+                                balloon.style.transform = "translate(calc(-50% + 350px), -230%)";
+
+                                setTimeout(() => { // di chuyển sang trái
+                                    balloon.style.transform = "translate(calc(-50% - 200px), -230%)";
+
+                                    //hộp quà biến mất
+                                    gift.style.transition = "opacity 1s, transform 1s";
+                                    gift.style.opacity = 0;
+
+                                    setTimeout(() => { //animation cho cục tròn
+                                        balloon.style.transition = "opacity 1s, transform 0.5s";
+                                        balloon.style.opacity = 0; // Đảm bảo viên tròn biến mất
+
+                                        setTimeout(() => {
+                                        const randomIndex = Math.floor(Math.random() * messages.length);
+                                        const messageElement = document.getElementById("message");
+                                        messageElement.innerText = messages[randomIndex];
+                                        messageElement.style.opacity = 0.75;
+                                        messageElement.style.transform = "scale(1)";
+                                    
+                                    }); //animation lời chúc
+                                }, 1000); // Thời gian biến mất hộp quà
+                            }, 500); // Chờ để snag trái
+                        }, 500); // Hộp quà biến mất và chờ để sang phải
+                    }, 1000); // Thu nhỏ và chờ mở hộp quà
+                }, 500); // Thời gian phóng to hộp quà
+            }, 100) // Chờ phóng to thu nhỏ hộp quà
+        }, 500) // Chờ thu nhỏ hộp quà
+    }
+        function enlargeGift(gift) {
+            gift.style.transform = "scale(1.1)";
+        }
+
+        function resetGift(gift) {
+            if (!gift.classList.contains('selected')) {
+                gift.style.transform = "scale(1)";
+            }
+        }
+    </script>
+</body>
+</html>
